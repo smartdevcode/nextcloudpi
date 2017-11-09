@@ -49,10 +49,6 @@ EXCL_DOCKER+="
 nc-update.sh
 nc-autoupdate-ncp.sh
 "
-
-# wait for other apt processes
-test -f /var/lib/apt/lists/lock && { echo "apt is currently running. Try again later";  exit 1; }
-
 cp etc/library.sh /usr/local/etc/
 
 source /usr/local/etc/library.sh
@@ -234,6 +230,7 @@ EOF
   mkdir -p /usr/local/etc/noip2
 
   # redis
+  sysctl vm.overcommit_memory=1
   grep -q APCu /var/www/nextcloud/config/config.php && {
     echo "installing redis..."
     apt-get update
